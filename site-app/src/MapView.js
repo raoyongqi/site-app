@@ -2,37 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import UploadForm from './UploadForm';
 
 // Define the custom icon for markers
 const customIcon = new L.DivIcon({
   className: 'custom-icon',
-  html: '<div style="background-color: red; width: 8px; height: 8px; border-radius: 50%;"></div>',
+  html: '<div style="background-color: red; width: 10px; height: 10px; border-radius: 50%;"></div>',
 });
 
 function MapView() {
   const [points, setPoints] = useState([]);
   const [geojsonData, setGeojsonData] = useState(null);
 
+  // Fetch points data from FastAPI server
+  useEffect(() => {
+    const fetchPointsData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/points');
+        const data = await response.json();
+        console.log(data)
+        setPoints(data.points || []); // Ensure points is always an array
+      } catch (error) {
+        console.error('Error fetching points data:', error);
+      }
+    };
+
+    fetchPointsData();
+  }, []);
+
   // Fetch GeoJSON data from FastAPI server
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/geojson')
-      .then(response => response.json())
-      .then(data => setGeojsonData(data))
-      .catch(error => console.error('Error fetching GeoJSON:', error));
+    const fetchGeojsonData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/geojson');
+        const data = await response.json();
+        setGeojsonData(data || {}); // Ensure geojsonData is always an object
+      } catch (error) {
+        console.error('Error fetching GeoJSON:', error);
+      }
+    };
+
+    fetchGeojsonData();
   }, []);
 
   return (
-    <div style={{ height: '100vh', width: '100vw', margin: 0, padding: 0 }}>
-      <UploadForm setPoints={setPoints} />
-      <MapContainer center={[40.0, 117.0]} zoom={10} style={{ height: '100%', width: '100%' }}>
+    <div style={{ height: '100vh', width: '100vw', margin: 0, padding: 0, position: 'relative' }}>
+      <MapContainer 
+        center={[35.0, 105.0]} // Centered on China
+        zoom={5} // Adjust zoom level to fit China
+        style={{ height: '100%', width: '100%' }}
+      >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {points.map((point, index) => (
+        {points && points.length > 0 && points.map((point, index) => (
           <Marker key={index} position={[point.lat, point.lon]} icon={customIcon}>
             <Popup>
+              <b>Site</b><br />
               {point.name || `Latitude: ${point.lat}, Longitude: ${point.lon}`}
             </Popup>
           </Marker>
@@ -43,12 +69,18 @@ function MapView() {
             pointToLayer={(feature, latlng) => L.marker(latlng, { icon: customIcon })}
             onEachFeature={(feature, layer) => {
               if (feature.properties && feature.properties.name) {
-                layer.bindPopup(`<b>${feature.properties.name}</b>`);
+                layer.bindPopup(`<b>Site</b><br /><b>${feature.properties.name}</b>`);
               }
             }}
           />
         )}
       </MapContainer>
+      {points.length > 0 && (
+        <div className="legend">
+          <div className="legend-icon"></div>
+          Site
+        </div>
+      )}
     </div>
   );
 }

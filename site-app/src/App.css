@@ -21,3 +21,63 @@ html, body, #root, .App {
 .map {
   flex: 1;
 }
+/* CSS to increase size of Leaflet zoom controls */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  width: 50px; /* Adjust size as needed */
+  height: 50px; /* Adjust size as needed */
+  font-size: 24px; /* Adjust font size to match new button size */
+  line-height: 50px; /* Center text vertically */
+}
+
+.leaflet-control-zoom {
+  font-size: 24px; /* Adjust font size to match new button size */
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background-color: #007bff; /* Optional: match button color */
+  color: #fff; /* Optional: match button text color */
+  border-radius: 5px; /* Optional: match button border radius */
+}
+.legend {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.legend .legend-icon {
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
+/* CSS to style the legend */
+.legend {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.legend-icon {
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+}
