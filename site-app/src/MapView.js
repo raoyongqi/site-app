@@ -12,6 +12,7 @@ const customIcon = new L.DivIcon({
 function MapView() {
   const [points, setPoints] = useState([]);
   const [geojsonData, setGeojsonData] = useState(null);
+  const [showPoints, setShowPoints] = useState(true); // State for marker visibility
 
   // Fetch points data from FastAPI server
   useEffect(() => {
@@ -19,7 +20,6 @@ function MapView() {
       try {
         const response = await fetch('http://127.0.0.1:8000/points');
         const data = await response.json();
-        console.log(data)
         setPoints(data.points || []); // Ensure points is always an array
       } catch (error) {
         console.error('Error fetching points data:', error);
@@ -44,6 +44,11 @@ function MapView() {
     fetchGeojsonData();
   }, []);
 
+  // Toggle marker visibility
+  const toggleMarkers = () => {
+    setShowPoints(!showPoints);
+  };
+
   return (
     <div style={{ height: '100vh', width: '100vw', margin: 0, padding: 0, position: 'relative' }}>
       <MapContainer 
@@ -55,7 +60,7 @@ function MapView() {
           url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
-        {points && points.length > 0 && points.map((point, index) => (
+        {showPoints && points && points.length > 0 && points.map((point, index) => (
           <Marker key={index} position={[point.lat, point.lon]} icon={customIcon}>
             <Popup>
               <b>Site</b><br />
@@ -75,6 +80,22 @@ function MapView() {
           />
         )}
       </MapContainer>
+      <button 
+        onClick={toggleMarkers}
+        style={{
+          position: 'fixed', // Fixes the button position relative to the viewport
+          top: '10px', // Distance from the top of the viewport
+          left: '10px', // Distance from the left of the viewport
+          padding: '10px',
+          backgroundColor: '#fff',
+          border: '1px solid #ccc',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          zIndex: 1000, // Ensures the button is above the map
+        }}
+      >
+        {showPoints ? 'Hide Markers' : 'Show Markers'}
+      </button>
       {points.length > 0 && (
         <div className="legend">
           <div className="legend-icon"></div>
