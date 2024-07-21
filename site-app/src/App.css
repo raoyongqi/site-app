@@ -1,0 +1,23 @@
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-form {
+  padding: 20px;
+  background-color: #f0f0f0;
+  flex: 0 0 auto;
+}
+
+.map-container {
+  flex: 1 1 auto;
+  display: flex;
+  height: calc(100% - 60px); /* Adjust based on the height of your upload form */
+}
+
+.map {
+  flex: 1;
+}
