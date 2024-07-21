@@ -6,14 +6,14 @@ import 'leaflet/dist/leaflet.css';
 function MapView({ points }) {
   const customIcon = new L.divIcon({
     className: 'custom-icon',
-    html: '<div style="background-color: yellow; width: 12px; height: 12px; border-radius: 50%;"></div>',
+    html: '<div style="background-color: red; width: 8px; height: 8px; border-radius: 50%;"></div>',
   });
 
   return (
     <MapContainer center={[0, 0]} zoom={2} className="map">
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
       />
       {points.map((point, index) => (
         <Marker key={index} position={[point.lat, point.lon]} icon={customIcon}>
