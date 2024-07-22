@@ -74,7 +74,7 @@ function MapView() {
             pointToLayer={(feature, latlng) => L.marker(latlng, { icon: customIcon })}
             onEachFeature={(feature, layer) => {
               if (feature.properties && feature.properties.name) {
-                layer.bindPopup(`<b>Site</b><br /><b>${feature.properties.name}</b>`);
+                layer.bindPopup(`<b>Site</b><br /><b>{feature.properties.name}</b>`);
               }
             }}
           />
@@ -84,11 +84,11 @@ function MapView() {
         onClick={toggleMarkers}
         style={{
           position: 'fixed', // Fixes the button position relative to the viewport
-          top: '10px', // Distance from the top of the viewport
+          top: '100px', // Distance from the top of the viewport
           left: '10px', // Distance from the left of the viewport
           padding: '10px',
           backgroundColor: '#fff',
-          border: '1px solid #ccc',
+          border: '5px solid #ccc',
           borderRadius: '5px',
           cursor: 'pointer',
           zIndex: 1000, // Ensures the button is above the map
@@ -96,9 +96,31 @@ function MapView() {
       >
         {showPoints ? 'Hide Markers' : 'Show Markers'}
       </button>
-      {points.length > 0 && (
-        <div className="legend">
-          <div className="legend-icon"></div>
+      {showPoints && points.length > 0 && (
+        <div 
+          className="legend"
+          style={{
+            position: 'fixed',
+            bottom: '10px',
+            right: '10px',
+            padding: '10px',
+            backgroundColor: '#fff',
+            border: '2px solid #ccc',
+            borderRadius: '5px',
+            zIndex: 2000, // Ensures the legend is above the map
+          }}
+        >
+          <div 
+            className="legend-icon"
+            style={{
+              backgroundColor: 'red',
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              display: 'inline-block',
+              marginRight: '5px',
+            }}
+          ></div>
           Site
         </div>
       )}
